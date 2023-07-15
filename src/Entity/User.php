@@ -58,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->createdAt =  new DateTime('now');
         $this->isVerified = false;
-        $this->tokenRegistrationLifeTime = (new DateTime('now'))->add( new DateInterval("P1D"));
+        $this->tokenRegistrationLifeTime = (new DateTime('now'))->add(new DateInterval("P1D"));
     }
 
     public function getId(): ?int

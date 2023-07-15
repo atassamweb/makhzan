@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CategorieRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -36,6 +37,7 @@ class Categorie
 
     public function __construct()
     {
+        $this->createdAt =  new DateTime('now');
         $this->produits = new ArrayCollection();
     }
 

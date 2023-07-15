@@ -1,4 +1,5 @@
 <?php
+
 namespace  App\Service;
 
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -9,24 +10,25 @@ use Symfony\Component\Mime\Address;
 /**
  * Service qui permet de générer un email
  */
-class MailerService {
-    public function __construct(private readonly MailerInterface $mailer){}
+class MailerService
+{
+    public function __construct(private readonly MailerInterface $mailer)
+    {
+    }
 
-    public function send(string $to, string $subject, string $templateTwig, array $context):void {
+    public function send(string $to, string $subject, string $templateTwig, array $context): void
+    {
+
         $email = (new TemplatedEmail())
             ->from(new Address('noreply@monsite.td', 'monsite'))
             ->to($to)
             ->subject($subject)
             ->htmlTemplate("mails/$templateTwig")
             ->context($context);
-
         try {
             $this->mailer->send($email);
-        }catch(TransportExceptionInterface $transportException){
+        } catch (TransportExceptionInterface $transportException) {
             throw $transportException;
         }
-
     }
-
-
 }

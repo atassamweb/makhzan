@@ -25,8 +25,7 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager,
         MailerService $mailerService,
         TokenGeneratorInterface $tokenGenerator
-    ): Response
-    {
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -72,15 +71,16 @@ class RegistrationController extends AbstractController
 
 
     #[Route('/verify/{token}/{id<\d+>}', name: 'account_verify', methods: ['GET'])]
-    public function verify(string $token, User $user, EntityManagerInterface $entityManager):Response{
+    public function verify(string $token, User $user, EntityManagerInterface $entityManager): Response
+    {
 
-        if ($user->getTokenRegistration() !== $token){
+        if ($user->getTokenRegistration() !== $token) {
             throw new AccessDeniedException();
         }
-        if ($user->getTokenRegistration() === null){
+        if ($user->getTokenRegistration() === null) {
             throw new AccessDeniedException();
         }
-        if (new DateTime('now') > $user->getTokenRegistrationLifeTime()){
+        if (new DateTime('now') > $user->getTokenRegistrationLifeTime()) {
             throw new AccessDeniedException();
         }
         $user->setIsVerified(true);

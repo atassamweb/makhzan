@@ -10,7 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProduitController extends AbstractController
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager){}
+    public function __construct(private readonly EntityManagerInterface $entityManager)
+    {
+    }
 
     #[Route('/produits', name: 'app_produit_index')]
     public function index(): Response

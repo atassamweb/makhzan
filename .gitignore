@@ -332,3 +332,7 @@ fabric.properties
 /web/js/
 
 # End of https://www.toptal.com/developers/gitignore/api/symfony,phpstorm,phpunit,phpcodesniffer,node
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###

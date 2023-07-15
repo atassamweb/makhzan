@@ -20,15 +20,15 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('nom', TextType::class, [
-               'label'=> 'Votre nom',
+               'label' => 'Votre nom',
 
             ])
             ->add('prenom', TextType::class, [
-                'label'=> 'Votre prénom',
+                'label' => 'Votre prénom',
 
             ])
             ->add('email', EmailType::class, [
-                'label'=> 'Votre email',
+                'label' => 'Votre email',
 
             ])
             ->add('agreeTerms', CheckboxType::class, [
