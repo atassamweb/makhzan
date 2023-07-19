@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class CategorieFixtures extends Fixture
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $c = [
             1 => [

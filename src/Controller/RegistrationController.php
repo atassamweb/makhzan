@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Service\MailerService;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
@@ -46,22 +47,30 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // MAILER SEND
+            $to = $user->getEmail();
+            $lifeTimeToken = $user->getTokenRegistrationLifeTime();
+            $lifeTimeTokenFormatted = '';
+            if ($lifeTimeToken instanceof DateTimeInterface) {
+                $lifeTimeTokenFormatted = $lifeTimeToken->format('d/m/y à H\hi');
+            }
+            if ($to !== null) {
+                $mailerService->send(
+                    $to,
+                    'Confirmation du compte utilisateur',
+                    'registration_confirmation.html.twig',
+                    [
+                        'user' => $user,
+                        'token' => $tokenRegistration,
+                        'lifeTimeToken' => $lifeTimeTokenFormatted
+                    ]
+                );
 
-            $mailerService->send(
-                $user->getEmail(),
-                'Confirmation du compte utilisateur',
-                'registration_confirmation.html.twig',
-                [
-                    'user' => $user,
-                    'token' => $tokenRegistration,
-                    'lifeTimeToken' => $user->getTokenRegistrationLifeTime()->format('d/m/y à H\hi')
-                ]
-            );
 
+                $this->addFlash('success', 'Votre compte a bien été créé, 
+                veuillez vérifier vos e-mails pour l\'activer!');
 
-            $this->addFlash('success', 'Votre compte a bien été créé, veuillez vérifier vos e-mails pour l\'activer!');
-
-            return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('app_login');
+            }
         }
 
         return $this->render('registration/register.html.twig', [
@@ -77,7 +86,7 @@ class RegistrationController extends AbstractController
         if ($user->getTokenRegistration() !== $token) {
             throw new AccessDeniedException();
         }
-        if ($user->getTokenRegistration() === null) {
+        if ($user->getTokenRegistration() == null) {
             throw new AccessDeniedException();
         }
         if (new DateTime('now') > $user->getTokenRegistrationLifeTime()) {

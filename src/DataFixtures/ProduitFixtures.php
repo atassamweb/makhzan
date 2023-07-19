@@ -2,10 +2,12 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Categorie;
 use App\Entity\Produit;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Exception;
 use Faker\Factory;
 
 class ProduitFixtures extends Fixture
@@ -24,7 +26,12 @@ class ProduitFixtures extends Fixture
             $produit->setPrix($faker->randomFloat(2));
             $produit->setCreatedAt(new DateTime('now'));
             $produit->setImage($faker->imageUrl(640, 480, 'animals', true));
-            $produit->setCategories($categorie);
+            if ($categorie instanceof Categorie || $categorie === null) {
+                $produit->setCategories($categorie);
+            } else {
+                // Gérer le cas où la référence ne correspond pas à une instance valide de Categorie
+                throw new Exception("Erreur : Impossible de trouver une catégorie appropriée pour ce produit.");
+            }
             $manager->persist($produit);
         }
         $manager->flush();
